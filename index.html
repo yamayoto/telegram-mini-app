@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Telegram Mini App</title>
+    <!-- Это ссылка на внешний файл CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Это ссылка на внешний файл JS (пока не трогаем) -->
+    <script src="script.js" defer></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Добро пожаловать! 👋</h1>
+            <p class="subtitle">текст 1</p>
+        </header>
+        
+        <main>
+            <div class="card">
+                <h2>текст 2</h2>
+                <p>текст 3.</p>
+                <button id="main-button" class="btn">кнопка 1</button>
+            </div>
+            
+            <div class="card">
+                <h2>текст 4</h2>
+                <ul>
+                    <li>текст 5</li>
+                    <li>текст 6</li>
+                    <li>текст 7</li>
+                </ul>
+            </div>
+        </main>
+<div class="card">
+    <h2>Эксперимент с type и class</h2>
+    
+    <form>
+        <!-- Текстовое поле -->
+        <input type="text" class="input-style" placeholder="Введите имя">
+        
+        <!-- Кнопки с РАЗНЫМ type -->
+        <button type="submit" class="btn">Отправить</button>
+        <button type="reset" class="btn">Очистить</button>
+        <button type="button" class="btn">Просто кнопка</button>
+    </form>
+</div>
+<div class="card">
+<h2>Напишите мяу</h2>
+<form>
+    <input type="text" class="input-style" placeholder="Введите мяу">
+</form>
+</div>
+        
+        <footer>
+            <p>текст 9</p>
+        </footer>
+    </div>
+</body>
+</html>
