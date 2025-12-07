@@ -134,3 +134,25 @@ footer {
         margin-bottom: 10px;
     }
 }
+
+/* Тёмная тема для Telegram */
+body.dark-theme {
+    background-color: #1a1a1d;
+    color: #ffffff;
+}
+
+body.dark-theme .card {
+    background-color: #2d2d30;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+body.dark-theme .input-style {
+    background-color: #3d3d40;
+    color: #ffffff;
+    border-color: #4d4d50;
+}
+
+body.dark-theme footer {
+    color: #aaaaaa;
+    border-top-color: #333;
+}
