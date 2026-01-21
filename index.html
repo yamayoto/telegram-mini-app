@@ -9,285 +9,302 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <!-- Экран приветствия -->
-    <div id="welcome-screen" class="screen active">
-        <div class="welcome-container">
-            <h1 id="welcome-title">Привет, <span id="username">Пользователь</span>!</h1>
-            <p id="motivation-text">Отличный день, чтобы выполнить задачи!</p>
-            <div id="loading-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-            <button id="start-btn" class="hidden">
-                <i class="fas fa-play"></i> Приступить!
-            </button>
-        </div>
-    </div>
-
-    <!-- Основной экран приложения -->
-    <div id="main-app" class="screen">
-        <!-- Шапка -->
-        <header>
-            <h1><i class="fas fa-tasks"></i> Task Manager</h1>
-            <button id="refresh-btn" class="icon-btn">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-        </header>
-
-        <!-- Панели статистики -->
-        <div class="stats-container">
-            <div class="stat-card" id="balance-card">
-                <div class="stat-icon">
-                    <i class="fas fa-coins"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Баланс:</span>
-                    <span id="balance-value" class="stat-value">0</span>
-                </div>
-            </div>
-
-            <div class="stat-card" id="completed-card">
-                <div class="stat-icon">
-                    <i class="fas fa-flag"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Выполнено:</span>
-                    <span id="completed-value" class="stat-value">0</span>
-                </div>
-            </div>
-
-            <div class="stat-card" id="active-card">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Активные:</span>
-                    <span id="active-value" class="stat-value">0</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Меню действий -->
-        <div class="actions-menu">
-            <button class="action-btn" id="add-task-btn">
-                <i class="fas fa-plus-circle"></i> Задать задачу!
-            </button>
-            <button class="action-btn" id="shop-btn">
-                <i class="fas fa-shopping-cart"></i> Купить выходной
-            </button>
-            <button class="action-btn" id="earn-btn">
-                <i class="fas fa-money-bill-wave"></i> Заработать монетки
-            </button>
-        </div>
-
-        <!-- Список активных задач -->
-        <div class="tasks-section">
-            <h2><i class="fas fa-list"></i> Активные задачи</h2>
-            <div id="tasks-container">
-                <!-- Задачи будут добавляться здесь динамически -->
-                <div class="empty-tasks">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>У вас еще нет задач, задайте первую задачу!</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Навигация внизу -->
-        <nav class="bottom-nav">
-            <button class="nav-btn active" data-section="tasks">
-                <i class="fas fa-tasks"></i>
-                <span>Задачи</span>
-            </button>
-            <button class="nav-btn" data-section="shop">
-                <i class="fas fa-store"></i>
-                <span>Магазин</span>
-            </button>
-            <button class="nav-btn" data-section="profile">
-                <i class="fas fa-user"></i>
-                <span>Профиль</span>
-            </button>
-        </nav>
-    </div>
-
-    <!-- Модальное окно добавления задачи -->
-    <div id="task-modal" class="modal">
-        <div class="modal-content">
+    <!-- Все предыдущие секции остаются -->
+    <!-- Добавим только новые модальные окна -->
+    
+    <!-- Модальное окно профиля -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content profile-modal">
             <div class="modal-header">
-                <h2><i class="fas fa-tasks"></i> Новая задача</h2>
+                <h2><i class="fas fa-user-circle"></i> Мой профиль</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="task-title"><i class="fas fa-heading"></i> Название задачи:</label>
-                    <input type="text" id="task-title" placeholder="Например: Сделать домашнее задание" maxlength="50">
-                </div>
-
-                <div class="form-group">
-                    <label for="task-deadline"><i class="fas fa-calendar-alt"></i> Срок выполнения (часов):</label>
-                    <input type="number" id="task-deadline" min="1" max="720" value="24" placeholder="Часы">
-                    <div class="deadline-hint">Можно от 1 до 720 часов (30 дней)</div>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-bell"></i> Напоминать каждые:</label>
-                    <div class="reminder-options">
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="60" checked>
-                            <span>1 час</span>
-                        </label>
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="120">
-                            <span>2 часа</span>
-                        </label>
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="180">
-                            <span>3 часа</span>
-                        </label>
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="1440">
-                            <span>1 день</span>
-                        </label>
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        <img id="user-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Аватар">
+                        <div class="avatar-status" id="status-indicator"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="profile-username">@username</h3>
+                        <div class="user-id">ID: <span id="user-id">123456789</span></div>
+                        <div class="join-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            Присоединился: <span id="join-date">01.01.2024</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label><i class="fas fa-chart-line"></i> Сложность задачи:</label>
-                    <div class="difficulty-options">
-                        <button class="difficulty-btn" data-level="easy">
-                            <i class="fas fa-leaf"></i> Легкая
-                            <span class="difficulty-bonus">+0%</span>
-                        </button>
-                        <button class="difficulty-btn" data-level="medium">
-                            <i class="fas fa-balance-scale"></i> Средняя
-                            <span class="difficulty-bonus">+50%</span>
-                        </button>
-                        <button class="difficulty-btn" data-level="hard">
-                            <i class="fas fa-fire"></i> Сложная
-                            <span class="difficulty-bonus">+100%</span>
-                        </button>
+                <div class="profile-stats">
+                    <div class="stats-grid">
+                        <div class="stat-box" id="active-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="stat-active">0</div>
+                                <div class="stat-label">Активные</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-box" id="completed-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="stat-completed">0</div>
+                                <div class="stat-label">Завершённые</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-box" id="overdue-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="stat-overdue">0</div>
+                                <div class="stat-label">Просроченные</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-box" id="total-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="stat-total">0</div>
+                                <div class="stat-label">Всего задач</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="reward-preview">
-                    <h3><i class="fas fa-coins"></i> Награда:</h3>
-                    <div class="reward-details">
-                        <div>Базовые монеты: <span id="base-reward">2.4</span></div>
-                        <div>Бонус сложности: <span id="difficulty-bonus-text">+0%</span></div>
-                        <div class="total-reward">Итого: <span id="total-reward">2.4</span> монет</div>
+                <div class="progress-section">
+                    <h4><i class="fas fa-chart-line"></i> Продуктивность</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span>Коэффициент выполнения: <strong id="completion-rate">75%</strong></span>
                     </div>
                 </div>
 
-                <button id="save-task-btn" class="save-btn">
-                    <i class="fas fa-save"></i> Сохранить задачу
-                </button>
+                <div class="achievements">
+                    <h4><i class="fas fa-trophy"></i> Достижения</h4>
+                    <div class="achievement-list">
+                        <div class="achievement-item" data-achieved="true">
+                            <i class="fas fa-star"></i>
+                            <span>Первая задача</span>
+                        </div>
+                        <div class="achievement-item" data-achieved="false">
+                            <i class="fas fa-fire"></i>
+                            <span>Страйк 3 дня</span>
+                        </div>
+                        <div class="achievement-item" data-achieved="true">
+                            <i class="fas fa-bolt"></i>
+                            <span>Быстрый исполнитель</span>
+                        </div>
+                        <div class="achievement-item" data-achieved="false">
+                            <i class="fas fa-gem"></i>
+                            <span>100 монет</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-settings">
+                    <h4><i class="fas fa-cog"></i> Настройки профиля</h4>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <span>Тёмная тема</span>
+                            <label class="switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Уведомления</span>
+                            <label class="switch">
+                                <input type="checkbox" id="notifications-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно магазина -->
+    <!-- Модальное окно магазина (обновлённое) -->
     <div id="shop-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content shop-modal">
             <div class="modal-header">
-                <h2><i class="fas fa-store"></i> Магазин выходных</h2>
+                <h2><i class="fas fa-store"></i> Магазин улучшений</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="shop-description">Купите выходной, и бот не будет беспокоить вас уведомлениями!</p>
-                
-                <div class="vacation-options">
-                    <div class="vacation-card">
-                        <div class="vacation-time">6 часов</div>
-                        <div class="vacation-price">
-                            <i class="fas fa-coins"></i> 15 монет
+                <div class="shop-balance">
+                    <i class="fas fa-coins"></i>
+                    <span>Ваш баланс: <strong id="shop-balance">0</strong> монет</span>
+                </div>
+
+                <div class="shop-tabs">
+                    <button class="shop-tab active" data-tab="themes">Темы</button>
+                    <button class="shop-tab" data-tab="games">Мини-игры</button>
+                    <button class="shop-tab" data-tab="colors">Цвета</button>
+                </div>
+
+                <!-- Вкладка тем -->
+                <div class="shop-content active" id="themes-tab">
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="item-details">
+                                <h4>Тёмная тема</h4>
+                                <p>Смените оформление приложения на тёмное</p>
+                            </div>
                         </div>
-                        <button class="buy-btn" data-hours="6" data-price="15">
-                            Купить
-                        </button>
+                        <div class="item-action">
+                            <div class="item-price">
+                                <i class="fas fa-coins"></i> 30
+                            </div>
+                            <button class="shop-buy-btn" data-item="dark_theme">
+                                <span id="dark-theme-status">Купить</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="vacation-card">
-                        <div class="vacation-time">12 часов</div>
-                        <div class="vacation-price">
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="item-details">
+                                <h4>Контрастная тема</h4>
+                                <p>Высококонтрастный режим для лучшей читаемости</p>
+                            </div>
+                        </div>
+                        <div class="item-action">
+                            <div class="item-price">
+                                <i class="fas fa-coins"></i> 50
+                            </div>
+                            <button class="shop-buy-btn" data-item="contrast_theme">
+                                Купить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка игр -->
+                <div class="shop-content" id="games-tab">
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-icon">
+                                <i class="fas fa-fist-raised"></i>
+                            </div>
+                            <div class="item-details">
+                                <h4>Haster Combat</h4>
+                                <p>Мини-игра в стиле хакерских сражений</p>
+                                <small>Доход: до 10 монет за игру</small>
+                            </div>
+                        </div>
+                        <div class="item-action">
+                            <div class="item-price">
+                                <i class="fas fa-coins"></i> 40
+                            </div>
+                            <button class="shop-buy-btn" data-item="haster_combat">
+                                <span id="haster-status">Купить</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="shop-item">
+                        <div class="item-info">
+                            <div class="item-icon">
+                                <i class="fas fa-bomb"></i>
+                            </div>
+                            <div class="item-details">
+                                <h4>Сапёр</h4>
+                                <p>Классическая игра на поиск мин</p>
+                                <small>Доход: до 5 монет за игру</small>
+                            </div>
+                        </div>
+                        <div class="item-action">
+                            <div class="item-price">
+                                <i class="fas fa-coins"></i> 20
+                            </div>
+                            <button class="shop-buy-btn" data-item="minesweeper">
+                                <span id="minesweeper-status">Купить</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка цветов -->
+                <div class="shop-content" id="colors-tab">
+                    <div class="color-picker-section">
+                        <h4>Выберите цвет интерфейса</h4>
+                        <p>Введите HEX-код цвета или выберите из палитры:</p>
+                        
+                        <div class="color-input-group">
+                            <input type="color" id="color-picker" value="#6a11cb">
+                            <input type="text" id="color-hex" placeholder="#6a11cb" maxlength="7">
+                            <button id="apply-color">Применить</button>
+                        </div>
+
+                        <div class="color-presets">
+                            <div class="color-preset" style="background-color: #6a11cb;" data-color="#6a11cb"></div>
+                            <div class="color-preset" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
+                            <div class="color-preset" style="background-color: #4CAF50;" data-color="#4CAF50"></div>
+                            <div class="color-preset" style="background-color: #2196F3;" data-color="#2196F3"></div>
+                            <div class="color-preset" style="background-color: #9c27b0;" data-color="#9c27b0"></div>
+                            <div class="color-preset" style="background-color: #ff9800;" data-color="#ff9800"></div>
+                        </div>
+
+                        <div class="color-preview">
+                            <h5>Предпросмотр:</h5>
+                            <div class="preview-element" id="color-preview">
+                                <div class="preview-button">Кнопка</div>
+                                <div class="preview-card">Карточка</div>
+                                <div class="preview-text">Текст</div>
+                            </div>
+                        </div>
+
+                        <div class="color-price">
                             <i class="fas fa-coins"></i> 25 монет
+                            <button class="shop-buy-btn" data-item="custom_color">
+                                Разблокировать
+                            </button>
                         </div>
-                        <button class="buy-btn" data-hours="12" data-price="25">
-                            Купить
-                        </button>
                     </div>
-
-                    <div class="vacation-card">
-                        <div class="vacation-time">24 часа</div>
-                        <div class="vacation-price">
-                            <i class="fas fa-coins"></i> 40 монет
-                        </div>
-                        <button class="buy-btn" data-hours="24" data-price="40">
-                            Купить
-                        </button>
-                    </div>
-
-                    <div class="vacation-card">
-                        <div class="vacation-time">48 часов</div>
-                        <div class="vacation-price">
-                            <i class="fas fa-coins"></i> 70 монет
-                        </div>
-                        <button class="buy-btn" data-hours="48" data-price="70">
-                            Купить
-                        </button>
-                    </div>
-                </div>
-
-                <div class="current-vacation">
-                    <h3><i class="fas fa-umbrella-beach"></i> Текущий статус:</h3>
-                    <p id="vacation-status">Выходной не активен</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно заработка -->
-    <div id="earn-modal" class="modal">
+    <!-- Игра Haster Combat (будет появляться при запуске) -->
+    <div id="game-modal" class="modal game-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-money-bill-wave"></i> Заработать монетки</h2>
+                <h2><i class="fas fa-gamepad"></i> Haster Combat</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="beta-notice">
-                    <i class="fas fa-flask"></i>
-                    <h3>Бета-тест режим</h3>
-                    <p>Эта функция находится в разработке. Скоро здесь появятся новые способы заработка!</p>
+                <div class="game-container" id="haster-game">
+                    <!-- Игра будет генерироваться в JS -->
                 </div>
-
-                <div class="coming-soon">
-                    <div class="feature-card">
-                        <i class="fas fa-user-friends"></i>
-                        <h4>Пригласи друга</h4>
-                        <p>Получи 20 монет за каждого приглашенного</p>
-                        <button class="feature-btn disabled">Скоро</button>
+                <div class="game-controls">
+                    <div class="game-stats">
+                        <div>Счёт: <span id="game-score">0</span></div>
+                        <div>Время: <span id="game-time">60</span>с</div>
+                        <div>Монеты: <span id="game-coins">0</span></div>
                     </div>
-
-                    <div class="feature-card">
-                        <i class="fas fa-newspaper"></i>
-                        <h4>Подпишись на канал</h4>
-                        <p>Получи 10 монет за подписку</p>
-                        <button class="feature-btn disabled">Скоро</button>
-                    </div>
-
-                    <div class="feature-card">
-                        <i class="fas fa-gamepad"></i>
-                        <h4>Мини-игры</h4>
-                        <p>Зарабатывай монеты, играя</p>
-                        <button class="feature-btn disabled">Скоро</button>
-                    </div>
+                    <button id="start-game" class="game-btn">Начать игру</button>
+                    <button id="cashout-game" class="game-btn" disabled>Забрать монеты</button>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Уведомления -->
-    <div id="notification" class="notification hidden">
-        <span id="notification-text"></span>
     </div>
 
     <script src="app.js"></script>
