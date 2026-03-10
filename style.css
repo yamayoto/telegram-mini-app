@@ -1077,3 +1077,80 @@ body.dark-theme .bottom-nav {
         min-width: 60px;
     }
 }
+
+
+#task-title {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    background: white;
+    color: #333;
+    box-sizing: border-box;
+}
+
+#task-title:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+}
+
+
+body.dark-theme #task-title {
+    background: #3d3d5a;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+
+.task-title-input {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 1000 !important;
+    position: relative !important;
+}
+
+
+.modal {
+    z-index: 9999 !important;
+}
+
+.modal-content {
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+.modal-body {
+    z-index: 10001 !important;
+    position: relative !important;
+}
+
+.form-group {
+    z-index: 10002 !important;
+    position: relative !important;
+}
+
+
+#task-title {
+    z-index: 10003 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+}
+
+
+.difficulty-options {
+    margin-top: 10px;
+    clear: both;
+}
+
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    margin-bottom: 10px;
+    display: block;
+}

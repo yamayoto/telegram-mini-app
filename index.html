@@ -110,80 +110,82 @@
         </button>
     </div>
 
+    
     <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ЗАДАЧИ -->
-    <div id="task-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-plus-circle"></i> Новая задача</h2>
-                <button class="close-modal">&times;</button>
+<div id="task-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-plus-circle"></i> Новая задача</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- ПОЛЕ ДЛЯ НАЗВАНИЯ - ТЕПЕРЬ ОНО ТОЧНО РАБОТАЕТ -->
+            <div class="form-group">
+                <label for="task-title"><i class="fas fa-pencil-alt"></i> Название задачи</label>
+                <input type="text" id="task-title" class="task-title-input" placeholder="Например: Сделать зарядку" autocomplete="off">
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label><i class="fas fa-pencil-alt"></i> Название задачи</label>
-                    <input type="text" id="task-title" placeholder="Например: Сделать зарядку">
-                </div>
 
-                <div class="form-group">
-                    <label><i class="fas fa-hourglass-half"></i> Время на выполнение</label>
-                    <div class="time-input-group">
-                        <input type="number" id="task-days" min="0" max="30" value="0" placeholder="Дни">
-                        <span>:</span>
-                        <input type="number" id="task-hours" min="0" max="23" value="0" placeholder="Часы">
-                        <span>:</span>
-                        <input type="number" id="task-minutes" min="1" max="59" value="30" placeholder="Минуты">
-                    </div>
-                    <div class="hint">формат: дни:часы:минуты</div>
+            <div class="form-group">
+                <label><i class="fas fa-hourglass-half"></i> Время на выполнение</label>
+                <div class="time-input-group">
+                    <input type="number" id="task-days" min="0" max="30" value="0" placeholder="Дни">
+                    <span>:</span>
+                    <input type="number" id="task-hours" min="0" max="23" value="0" placeholder="Часы">
+                    <span>:</span>
+                    <input type="number" id="task-minutes" min="1" max="59" value="30" placeholder="Минуты">
                 </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-bell"></i> Напомнить за</label>
-                    <div class="time-input-group">
-                        <input type="number" id="reminder-days" min="0" max="30" value="0" placeholder="Дни">
-                        <span>:</span>
-                        <input type="number" id="reminder-hours" min="0" max="23" value="0" placeholder="Часы">
-                        <span>:</span>
-                        <input type="number" id="reminder-minutes" min="1" max="59" value="5" placeholder="Минуты">
-                    </div>
-                    <div class="hint">до дедлайна</div>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-chart-line"></i> Сложность</label>
-                    <div class="difficulty-options">
-                        <button class="difficulty-btn" data-level="easy">
-                            <i class="fas fa-smile"></i>
-                            <span>Легко</span>
-                            <span class="difficulty-bonus">x0.5</span>
-                        </button>
-                        <button class="difficulty-btn active" data-level="medium">
-                            <i class="fas fa-meh"></i>
-                            <span>Средне</span>
-                            <span class="difficulty-bonus">x1.0</span>
-                        </button>
-                        <button class="difficulty-btn" data-level="hard">
-                            <i class="fas fa-frown"></i>
-                            <span>Сложно</span>
-                            <span class="difficulty-bonus">x2.0</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="reward-preview">
-                    <h3><i class="fas fa-coins"></i> Награда</h3>
-                    <div class="reward-details">
-                        <div>Базовая: <span id="base-reward">0.5</span> монет</div>
-                        <div>Бонус сложности: <span id="difficulty-bonus-text">+0%</span></div>
-                        <div class="total-reward">Итого: <span id="total-reward">0.5</span> монет</div>
-                    </div>
-                </div>
-
-                <button class="save-btn" id="save-task-btn">
-                    <i class="fas fa-check"></i>
-                    Создать задачу
-                </button>
+                <div class="hint">дни:часы:минуты</div>
             </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-bell"></i> Напомнить за</label>
+                <div class="time-input-group">
+                    <input type="number" id="reminder-days" min="0" max="30" value="0" placeholder="Дни">
+                    <span>:</span>
+                    <input type="number" id="reminder-hours" min="0" max="23" value="0" placeholder="Часы">
+                    <span>:</span>
+                    <input type="number" id="reminder-minutes" min="1" max="59" value="5" placeholder="Минуты">
+                </div>
+                <div class="hint">до дедлайна</div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-chart-line"></i> Сложность</label>
+                <div class="difficulty-options">
+                    <button type="button" class="difficulty-btn" data-level="easy">
+                        <i class="fas fa-smile"></i>
+                        <span>Легко</span>
+                        <span class="difficulty-bonus">x0.5</span>
+                    </button>
+                    <button type="button" class="difficulty-btn active" data-level="medium">
+                        <i class="fas fa-meh"></i>
+                        <span>Средне</span>
+                        <span class="difficulty-bonus">x1.0</span>
+                    </button>
+                    <button type="button" class="difficulty-btn" data-level="hard">
+                        <i class="fas fa-frown"></i>
+                        <span>Сложно</span>
+                        <span class="difficulty-bonus">x2.0</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="reward-preview">
+                <h3><i class="fas fa-coins"></i> Награда</h3>
+                <div class="reward-details">
+                    <div>Базовая: <span id="base-reward">0.5</span> монет</div>
+                    <div>Бонус сложности: <span id="difficulty-bonus-text">+0%</span></div>
+                    <div class="total-reward">Итого: <span id="total-reward">0.5</span> монет</div>
+                </div>
+            </div>
+
+            <button type="button" class="save-btn" id="save-task-btn">
+                <i class="fas fa-check"></i>
+                Создать задачу
+            </button>
         </div>
     </div>
+</div>
 
     <!-- МОДАЛЬНОЕ ОКНО ПРОФИЛЯ -->
     <div id="profile-modal" class="modal">

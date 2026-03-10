@@ -309,25 +309,58 @@ function getReminderMinutes() {
 }
 
 function saveNewTask() {
-    const title = document.getElementById('task-title').value.trim();
-    const totalMinutes = getTotalMinutes();
-    const reminderMinutes = getReminderMinutes();
+    console.log("Пытаемся сохранить задачу...");
     
-    if (!title) {
-        showNotification('Введите название задачи!', 'error');
+    // Получаем элементы
+    const titleInput = document.getElementById('task-title');
+    const daysInput = document.getElementById('task-days');
+    const hoursInput = document.getElementById('task-hours');
+    const minutesInput = document.getElementById('task-minutes');
+    const reminderDaysInput = document.getElementById('reminder-days');
+    const reminderHoursInput = document.getElementById('reminder-hours');
+    const reminderMinutesInput = document.getElementById('reminder-minutes');
+    
+    // Проверяем что элементы существуют
+    if (!titleInput) {
+        console.error("Поле названия не найдено!");
+        showNotification('Ошибка: поле названия не найдено', 'error');
         return;
     }
+    
+    // Получаем значения
+    const title = titleInput.value.trim();
+    console.log("Название задачи:", title);
+    
+    const days = parseInt(daysInput.value) || 0;
+    const hours = parseInt(hoursInput.value) || 0;
+    const minutes = parseInt(minutesInput.value) || 1;
+    
+    const reminderDays = parseInt(reminderDaysInput.value) || 0;
+    const reminderHours = parseInt(reminderHoursInput.value) || 0;
+    const reminderMinutes = parseInt(reminderMinutesInput.value) || 5;
+    
+    // Валидация
+    if (!title) {
+        showNotification('Введите название задачи!', 'error');
+        titleInput.style.borderColor = '#f44336';
+        titleInput.focus();
+        return;
+    }
+    
+    const totalMinutes = (days * 24 * 60) + (hours * 60) + minutes;
+    const reminderTotalMinutes = (reminderDays * 24 * 60) + (reminderHours * 60) + reminderMinutes;
     
     if (totalMinutes < 1 || totalMinutes > 43200) {
         showNotification('Введите время от 1 минуты до 30 дней!', 'error');
         return;
     }
     
-    if (reminderMinutes >= totalMinutes) {
+    if (reminderTotalMinutes >= totalMinutes) {
         showNotification('Напоминание должно быть раньше дедлайна!', 'error');
         return;
     }
     
+    // Создаем задачу
     const now = new Date();
     let deadline = new Date(now.getTime() + totalMinutes * 60 * 1000);
     
@@ -341,7 +374,7 @@ function saveNewTask() {
         id: Date.now().toString(),
         title: title,
         deadline: deadline.toISOString(),
-        reminder: reminderMinutes,
+        reminder: reminderTotalMinutes,
         difficulty: currentDifficulty,
         reward: reward,
         completed: false,
@@ -349,21 +382,46 @@ function saveNewTask() {
         totalMinutes: totalMinutes
     };
     
+    console.log("Новая задача:", newTask);
+    
+    // Добавляем в список
     tasks.push(newTask);
     saveData();
     renderTasks();
     closeAllModals();
     showNotification('Задача добавлена!', 'success');
     
-    document.getElementById('task-title').value = '';
-    document.getElementById('task-days').value = '0';
-    document.getElementById('task-hours').value = '0';
-    document.getElementById('task-minutes').value = '30';
-    document.getElementById('reminder-days').value = '0';
-    document.getElementById('reminder-hours').value = '0';
-    document.getElementById('reminder-minutes').value = '5';
+    // Очищаем форму
+    titleInput.value = '';
+    titleInput.style.borderColor = '#e0e0e0';
+    daysInput.value = '0';
+    hoursInput.value = '0';
+    minutesInput.value = '30';
+    reminderDaysInput.value = '0';
+    reminderHoursInput.value = '0';
+    reminderMinutesInput.value = '5';
     
+    // Отправляем в бота
     sendToBot('new_task', { task: newTask });
+}
+
+// Функция для проверки работы полей ввода
+window.checkInputs = function() {
+    const title = document.getElementById('task-title');
+    if (title) {
+        console.log("Поле названия найдено");
+        title.style.border = '3px solid green';
+        title.focus();
+    } else {
+        console.error("Поле названия НЕ найдено!");
+    }
+    
+    // Проверяем все поля
+    const inputs = document.querySelectorAll('input');
+    console.log("Найдено полей ввода:", inputs.length);
+    inputs.forEach((input, index) => {
+        console.log(`Поле ${index}:`, input.id, input.type);
+    });
 }
 
 function renderTasks() {
