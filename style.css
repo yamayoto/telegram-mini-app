@@ -1,4 +1,3 @@
-/* Основные стили */
 :root {
     --primary-color: #6a11cb;
     --secondary-color: #2575fc;
@@ -41,7 +40,6 @@ body {
     display: block;
 }
 
-/* Экран приветствия */
 .welcome-container {
     display: flex;
     flex-direction: column;
@@ -58,7 +56,6 @@ body {
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 #motivation-text {
@@ -66,7 +63,6 @@ body {
     color: var(--text-light);
     margin-bottom: 40px;
     font-style: italic;
-    animation: fadeIn 1s ease-in;
 }
 
 #loading-dots {
@@ -112,7 +108,6 @@ body {
     box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3);
 }
 
-/* Шапка приложения */
 header {
     display: flex;
     justify-content: space-between;
@@ -148,7 +143,6 @@ header h1 {
     background: var(--light-color);
 }
 
-/* Статистика */
 .stats-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -212,7 +206,6 @@ header h1 {
     color: var(--dark-color);
 }
 
-/* Меню действий */
 .actions-menu {
     display: flex;
     flex-direction: column;
@@ -244,7 +237,6 @@ header h1 {
     font-size: 1.2rem;
 }
 
-/* Список задач */
 .tasks-section {
     background: white;
     border-radius: var(--border-radius);
@@ -350,7 +342,6 @@ header h1 {
     transform: scale(1.05);
 }
 
-/* Навигация внизу */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -392,7 +383,6 @@ header h1 {
     font-size: 0.8rem;
 }
 
-/* Модальные окна */
 .modal {
     display: none;
     position: fixed;
@@ -464,7 +454,6 @@ header h1 {
     padding: 20px;
 }
 
-/* Форма добавления задачи */
 .form-group {
     margin-bottom: 20px;
 }
@@ -566,7 +555,6 @@ header h1 {
     font-weight: bold;
 }
 
-/* Предпросмотр награды */
 .reward-preview {
     background: var(--light-color);
     border-radius: var(--border-radius);
@@ -618,229 +606,6 @@ header h1 {
     box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3);
 }
 
-/* Магазин */
-.shop-description {
-    text-align: center;
-    color: var(--text-light);
-    margin-bottom: 20px;
-    font-style: italic;
-}
-
-.vacation-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.vacation-card {
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: var(--border-radius);
-    padding: 20px;
-    text-align: center;
-    transition: var(--transition);
-}
-
-.vacation-card:hover {
-    border-color: var(--primary-color);
-    transform: translateY(-5px);
-}
-
-.vacation-time {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.vacation-price {
-    font-size: 1.1rem;
-    color: var(--warning-color);
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.buy-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: var(--transition);
-    width: 100%;
-}
-
-.buy-btn:hover {
-    background: var(--secondary-color);
-}
-
-.current-vacation {
-    background: var(--light-color);
-    border-radius: var(--border-radius);
-    padding: 15px;
-}
-
-.current-vacation h3 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Страница заработка */
-.beta-notice {
-    text-align: center;
-    padding: 20px;
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    color: white;
-    border-radius: var(--border-radius);
-    margin-bottom: 30px;
-}
-
-.beta-notice i {
-    font-size: 3rem;
-    margin-bottom: 15px;
-}
-
-.coming-soon {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.feature-card {
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: var(--border-radius);
-    padding: 15px;
-    text-align: center;
-    transition: var(--transition);
-}
-
-.feature-card:hover {
-    border-color: var(--primary-color);
-}
-
-.feature-card i {
-    font-size: 2rem;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.feature-card h4 {
-    margin-bottom: 10px;
-    color: var(--dark-color);
-}
-
-.feature-card p {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-bottom: 15px;
-}
-
-.feature-btn {
-    background: #e0e0e0;
-    color: var(--text-light);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: not-allowed;
-    width: 100%;
-}
-
-.feature-btn.disabled {
-    opacity: 0.6;
-}
-
-/* Уведомления */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: var(--success-color);
-    color: white;
-    padding: 15px 25px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    z-index: 1001;
-    animation: slideIn 0.3s ease;
-    max-width: 300px;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.notification.hidden {
-    display: none;
-}
-
-/* Вспомогательные классы */
-.hidden {
-    display: none !important;
-}
-
-.error {
-    border-color: var(--danger-color) !important;
-}
-
-.error-text {
-    color: var(--danger-color);
-    font-size: 0.8rem;
-    margin-top: 5px;
-}
-
-/* Адаптивность */
-@media (max-width: 480px) {
-    .stats-container {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-    
-    .vacation-options,
-    .coming-soon,
-    .reminder-options {
-        grid-template-columns: 1fr;
-    }
-    
-    .difficulty-options {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    #welcome-title {
-        font-size: 2rem;
-    }
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.fade-in {
-    animation: fadeIn 0.5s ease;
-}
-/* Добавим в конец файла style.css */
-
-/* ========== ПРОФИЛЬ ========== */
-.profile-modal {
-    max-width: 500px;
-}
-
 .profile-header {
     display: flex;
     align-items: center;
@@ -872,11 +637,8 @@ header h1 {
     height: 15px;
     border-radius: 50%;
     border: 2px solid white;
+    background: #4CAF50;
 }
-
-.status-online { background: #4CAF50; }
-.status-offline { background: #9E9E9E; }
-.status-busy { background: #F44336; }
 
 .profile-info h3 {
     font-size: 1.5rem;
@@ -920,11 +682,6 @@ header h1 {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-#active-stat .stat-icon { background: #2196F3; }
-#completed-stat .stat-icon { background: #4CAF50; }
-#overdue-stat .stat-icon { background: #F44336; }
-#total-stat .stat-icon { background: #9C27B0; }
-
 .stat-icon {
     width: 50px;
     height: 50px;
@@ -934,6 +691,7 @@ header h1 {
     justify-content: center;
     color: white;
     font-size: 1.2rem;
+    background: var(--primary-color);
 }
 
 .stat-content {
@@ -991,52 +749,6 @@ header h1 {
     color: var(--text-light);
 }
 
-.achievements {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: var(--box-shadow);
-}
-
-.achievements h4 {
-    margin-bottom: 15px;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.achievement-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.achievement-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: var(--border-radius);
-    background: var(--light-color);
-    transition: var(--transition);
-}
-
-.achievement-item[data-achieved="true"] {
-    background: rgba(76, 175, 80, 0.1);
-    border-left: 3px solid #4CAF50;
-}
-
-.achievement-item[data-achieved="false"] {
-    opacity: 0.5;
-}
-
-.achievement-item i {
-    color: #FFD700;
-    font-size: 1.2rem;
-}
-
 .profile-settings {
     background: white;
     border-radius: var(--border-radius);
@@ -1070,7 +782,6 @@ header h1 {
     border-bottom: none;
 }
 
-/* Переключатель (toggle switch) */
 .switch {
     position: relative;
     display: inline-block;
@@ -1114,11 +825,6 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px);
-}
-
-/* ========== МАГАЗИН ========== */
-.shop-modal {
-    max-width: 500px;
 }
 
 .shop-balance {
@@ -1214,11 +920,6 @@ input:checked + .slider:before {
     margin-bottom: 5px;
 }
 
-.item-details small {
-    font-size: 0.8rem;
-    color: var(--success-color);
-}
-
 .item-action {
     display: flex;
     flex-direction: column;
@@ -1256,194 +957,47 @@ input:checked + .slider:before {
     cursor: not-allowed;
 }
 
-.shop-buy-btn.owned {
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
     background: var(--success-color);
-}
-
-/* ========== ВЫБОР ЦВЕТА ========== */
-.color-picker-section {
-    padding: 20px;
-    background: white;
+    color: white;
+    padding: 15px 25px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+    z-index: 1001;
+    animation: slideIn 0.3s ease;
+    max-width: 300px;
 }
 
-.color-input-group {
-    display: flex;
-    gap: 10px;
-    margin: 15px 0;
-    align-items: center;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-#color-picker {
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+.notification.hidden {
+    display: none;
 }
 
-#color-hex {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: var(--border-radius);
-    font-family: monospace;
-    font-size: 1rem;
+.hidden {
+    display: none !important;
 }
 
-#apply-color {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-#apply-color:hover {
-    background: var(--secondary-color);
-}
-
-.color-presets {
-    display: flex;
-    gap: 10px;
-    margin: 20px 0;
-    flex-wrap: wrap;
-}
-
-.color-preset {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: var(--transition);
-    border: 2px solid transparent;
-}
-
-.color-preset:hover {
-    transform: scale(1.1);
-    border-color: var(--dark-color);
-}
-
-.color-preset.active {
-    border-color: var(--dark-color);
-    transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-.color-preview {
-    margin: 20px 0;
-    padding: 20px;
-    background: var(--light-color);
-    border-radius: var(--border-radius);
-}
-
-.preview-element {
-    display: flex;
-    gap: 15px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
-
-.preview-button, .preview-card, .preview-text {
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    font-weight: 500;
-}
-
-.preview-button {
-    background: var(--primary-color);
-    color: white;
-}
-
-.preview-card {
-    background: white;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-}
-
-.preview-text {
-    color: var(--primary-color);
-    font-weight: bold;
-}
-
-.color-price {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 20px;
-    border-top: 2px solid #eee;
-    font-weight: bold;
-    color: var(--warning-color);
-}
-
-/* ========== ИГРЫ ========== */
-.game-modal {
-    max-width: 400px;
-}
-
-.game-container {
-    background: #1a1a2e;
-    border-radius: var(--border-radius);
-    padding: 20px;
-    margin-bottom: 20px;
-    min-height: 300px;
-    position: relative;
-    overflow: hidden;
-}
-
-.game-controls {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 15px;
-    box-shadow: var(--box-shadow);
-}
-
-.game-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 15px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.game-stats div {
-    background: var(--light-color);
-    padding: 10px;
-    border-radius: var(--border-radius);
-}
-
-.game-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-    width: 100%;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.game-btn:hover:not(:disabled) {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
-}
-
-.game-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-/* ========== ТЁМНАЯ ТЕМА ========== */
 body.dark-theme {
     --primary-color: #8a2be2;
     --secondary-color: #9370db;
-    --accent-color: #ff7b7b;
     --light-color: #2d2d44;
     --dark-color: #f0f0f0;
     --text-color: #e0e0e0;
@@ -1451,129 +1005,18 @@ body.dark-theme {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
-body.dark-theme .screen {
-    background: transparent;
-}
-
 body.dark-theme .stat-card,
 body.dark-theme .action-btn,
 body.dark-theme .tasks-section,
 body.dark-theme .modal-content,
 body.dark-theme .shop-item,
-body.dark-theme .profile-stats,
 body.dark-theme .progress-section,
-body.dark-theme .achievements,
-body.dark-theme .profile-settings,
-body.dark-theme .color-picker-section {
+body.dark-theme .profile-settings {
     background: #2d2d44;
     color: var(--text-color);
-}
-
-body.dark-theme .action-btn {
-    border-color: #444;
-}
-
-body.dark-theme .empty-tasks {
-    color: var(--text-light);
-}
-
-body.dark-theme .empty-tasks i {
-    color: #555;
 }
 
 body.dark-theme .bottom-nav {
     background: #2d2d44;
     border-top: 1px solid #444;
-}
-
-body.dark-theme .modal {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-body.dark-theme input,
-body.dark-theme .reminder-option {
-    background: #3d3d5a;
-    border-color: #555;
-    color: var(--text-color);
-}
-
-body.dark-theme .reward-preview {
-    background: #3d3d5a;
-}
-
-/* ========== ИГРА HASTER COMBAT ========== */
-.hack-node {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(45deg, #00ff88, #00ccff);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    animation: pulse 2s infinite;
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-}
-
-.hack-node:hover {
-    transform: scale(1.2);
-}
-
-.hack-node.destroyed {
-    background: linear-gradient(45deg, #ff4444, #ff8800);
-    animation: explode 0.5s forwards;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-@keyframes explode {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
-}
-
-/* ========== АДАПТИВНОСТЬ ========== */
-@media (max-width: 480px) {
-    .profile-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .shop-item {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-    
-    .item-info {
-        flex-direction: column;
-    }
-    
-    .item-action {
-        align-items: center;
-    }
-    
-    .color-input-group {
-        flex-direction: column;
-    }
-    
-    #color-picker {
-        width: 100%;
-        height: 60px;
-    }
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
