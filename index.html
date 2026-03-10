@@ -76,9 +76,9 @@
                 <i class="fas fa-store"></i>
                 <span>Магазин</span>
             </button>
-            <button class="action-btn" id="earn-btn">
-                <i class="fas fa-gamepad"></i>
-                <span>Заработать</span>
+            <button class="action-btn" id="homa-btn">
+                <i class="fas fa-paw"></i>
+                <span>Хома</span>
             </button>
         </div>
 
@@ -125,30 +125,26 @@
 
                 <div class="form-group">
                     <label><i class="fas fa-hourglass-half"></i> Время на выполнение</label>
-                    <input type="number" id="task-deadline" min="1" max="720" value="24">
-                    <div class="deadline-hint">часов (макс. 720 = 30 дней)</div>
+                    <div class="time-input-group">
+                        <input type="number" id="task-days" min="0" max="30" value="0" placeholder="Дни">
+                        <span>:</span>
+                        <input type="number" id="task-hours" min="0" max="23" value="0" placeholder="Часы">
+                        <span>:</span>
+                        <input type="number" id="task-minutes" min="1" max="59" value="30" placeholder="Минуты">
+                    </div>
+                    <div class="hint">формат: дни:часы:минуты</div>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-bell"></i> Напомнить за</label>
-                    <div class="reminder-options">
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="5" checked>
-                            <span>5 мин</span>
-                        </label>
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="15">
-                            <span>15 мин</span>
-                        </label>
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="30">
-                            <span>30 мин</span>
-                        </label>
-                        <label class="reminder-option">
-                            <input type="radio" name="reminder" value="60">
-                            <span>1 час</span>
-                        </label>
+                    <div class="time-input-group">
+                        <input type="number" id="reminder-days" min="0" max="30" value="0" placeholder="Дни">
+                        <span>:</span>
+                        <input type="number" id="reminder-hours" min="0" max="23" value="0" placeholder="Часы">
+                        <span>:</span>
+                        <input type="number" id="reminder-minutes" min="1" max="59" value="5" placeholder="Минуты">
                     </div>
+                    <div class="hint">до дедлайна</div>
                 </div>
 
                 <div class="form-group">
@@ -175,9 +171,9 @@
                 <div class="reward-preview">
                     <h3><i class="fas fa-coins"></i> Награда</h3>
                     <div class="reward-details">
-                        <div>Базовая: <span id="base-reward">2.4</span> монет</div>
+                        <div>Базовая: <span id="base-reward">0.5</span> монет</div>
                         <div>Бонус сложности: <span id="difficulty-bonus-text">+0%</span></div>
-                        <div class="total-reward">Итого: <span id="total-reward">2.4</span> монет</div>
+                        <div class="total-reward">Итого: <span id="total-reward">0.5</span> монет</div>
                     </div>
                 </div>
 
@@ -276,7 +272,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО МАГАЗИНА -->
+    <!-- МОДАЛЬНОЕ ОКНО МАГАЗИНА (ТОЛЬКО ВЫХОДНЫЕ) -->
     <div id="shop-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,41 +285,82 @@
                     <span>Баланс: <strong id="shop-balance">0</strong> монет</span>
                 </div>
 
-                <div class="shop-tabs">
-                    <button class="shop-tab active" data-tab="themes">Темы</button>
-                    <button class="shop-tab" data-tab="games">Игры</button>
+                <div class="shop-description">
+                    <p>💰 5 монет = 1 час выходного</p>
+                    <p>Выходной переносит все задачи на купленное время</p>
                 </div>
 
-                <div class="shop-content active" id="themes-tab">
-                    <div class="shop-item">
-                        <div class="item-info">
-                            <div class="item-icon"><i class="fas fa-moon"></i></div>
-                            <div class="item-details">
-                                <h4>Тёмная тема</h4>
-                                <p>Смените оформление на тёмное</p>
-                            </div>
-                        </div>
-                        <div class="item-action">
-                            <div class="item-price"><i class="fas fa-coins"></i> 30</div>
-                            <button class="shop-buy-btn" data-item="dark_theme">Купить</button>
-                        </div>
+                <div class="vacation-options">
+                    <div class="vacation-card">
+                        <div class="vacation-time">1 час</div>
+                        <div class="vacation-price"><i class="fas fa-coins"></i> 5</div>
+                        <button class="buy-btn" data-hours="1" data-price="5">Купить</button>
+                    </div>
+                    <div class="vacation-card">
+                        <div class="vacation-time">2 часа</div>
+                        <div class="vacation-price"><i class="fas fa-coins"></i> 10</div>
+                        <button class="buy-btn" data-hours="2" data-price="10">Купить</button>
+                    </div>
+                    <div class="vacation-card">
+                        <div class="vacation-time">4 часа</div>
+                        <div class="vacation-price"><i class="fas fa-coins"></i> 20</div>
+                        <button class="buy-btn" data-hours="4" data-price="20">Купить</button>
+                    </div>
+                    <div class="vacation-card">
+                        <div class="vacation-time">8 часов</div>
+                        <div class="vacation-price"><i class="fas fa-coins"></i> 40</div>
+                        <button class="buy-btn" data-hours="8" data-price="40">Купить</button>
+                    </div>
+                    <div class="vacation-card">
+                        <div class="vacation-time">24 часа</div>
+                        <div class="vacation-price"><i class="fas fa-coins"></i> 120</div>
+                        <button class="buy-btn" data-hours="24" data-price="120">Купить</button>
+                    </div>
+                    <div class="vacation-card">
+                        <div class="vacation-time">48 часов</div>
+                        <div class="vacation-price"><i class="fas fa-coins"></i> 240</div>
+                        <button class="buy-btn" data-hours="48" data-price="240">Купить</button>
                     </div>
                 </div>
 
-                <div class="shop-content" id="games-tab">
-                    <div class="shop-item">
-                        <div class="item-info">
-                            <div class="item-icon"><i class="fas fa-gamepad"></i></div>
-                            <div class="item-details">
-                                <h4>В разработке</h4>
-                                <p>Скоро будут игры</p>
-                            </div>
-                        </div>
-                        <div class="item-action">
-                            <div class="item-price"><i class="fas fa-coins"></i> 0</div>
-                            <button class="shop-buy-btn" disabled>Скоро</button>
-                        </div>
+                <div class="current-vacation">
+                    <h3><i class="fas fa-umbrella-beach"></i> Текущий выходной</h3>
+                    <p id="vacation-status">Нет активного выходного</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ИГРЫ ХОМА -->
+    <div id="homa-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-paw"></i> Хома</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="homa-container">
+                    <div class="homa-stats">
+                        <div>Монет за клик: <strong>0.0001</strong></div>
+                        <div>Сегодня: <span id="homa-today">0</span> / 10 монет</div>
+                        <div>Всего заработано: <span id="homa-total">0</span> монет</div>
                     </div>
+                    
+                    <div class="homa-image-container">
+                        <img src="homa.png" alt="Хома" id="homa-image" class="homa-image">
+                        <div class="homa-click-effect" id="homa-effect">+0.0001</div>
+                    </div>
+                    
+                    <div class="homa-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="homa-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text" id="homa-progress-text">0% от лимита</div>
+                    </div>
+                    
+                    <button class="homa-max-btn" id="homa-max-btn" disabled>
+                        Достигнут лимит на сегодня
+                    </button>
                 </div>
             </div>
         </div>

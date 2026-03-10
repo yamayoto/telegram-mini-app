@@ -4,14 +4,18 @@ tg.expand();
 
 let userData = {
     username: 'Пользователь',
-    balance: 25,
+    balance: 100,
     completedTasks: 0,
     activeTasks: 0,
-    userId: null
+    userId: null,
+    homaToday: 0,
+    homaTotal: 0,
+    lastHomaReset: new Date().toDateString()
 };
 
 let tasks = [];
 let currentDifficulty = 'medium';
+let vacationEnd = null;
 
 const difficultyMultipliers = {
     'easy': 0.5,
@@ -29,11 +33,13 @@ const motivationPhrases = [
 
 document.addEventListener('DOMContentLoaded', function() {
     initTelegramUser();
-    loadTasks();
+    loadData();
     setupEventListeners();
     showWelcomeScreen();
     updateUserInfo();
     renderTasks();
+    checkHomaReset();
+    checkVacation();
 });
 
 function initTelegramUser() {
@@ -50,16 +56,36 @@ function initTelegramUser() {
     }
 }
 
-function loadTasks() {
-    const saved = localStorage.getItem('tasks');
-    if (saved) {
-        tasks = JSON.parse(saved);
-        updateTaskCounters();
+function loadData() {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
     }
+    
+    const savedUser = localStorage.getItem('userData');
+    if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        userData.balance = parsed.balance || 100;
+        userData.homaToday = parsed.homaToday || 0;
+        userData.homaTotal = parsed.homaTotal || 0;
+        userData.lastHomaReset = parsed.lastHomaReset || new Date().toDateString();
+    }
+    
+    const savedVacation = localStorage.getItem('vacationEnd');
+    if (savedVacation) {
+        vacationEnd = new Date(savedVacation);
+        if (vacationEnd < new Date()) {
+            vacationEnd = null;
+            localStorage.removeItem('vacationEnd');
+        }
+    }
+    
+    updateTaskCounters();
 }
 
-function saveTasks() {
+function saveData() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('userData', JSON.stringify(userData));
     updateTaskCounters();
 }
 
@@ -71,10 +97,39 @@ function updateTaskCounters() {
 }
 
 function updateUserInfo() {
-    document.getElementById('balance-value').textContent = userData.balance;
+    document.getElementById('balance-value').textContent = userData.balance.toFixed(2);
     document.getElementById('completed-value').textContent = userData.completedTasks;
     document.getElementById('active-value').textContent = userData.activeTasks;
-    document.getElementById('shop-balance').textContent = userData.balance;
+    document.getElementById('shop-balance').textContent = userData.balance.toFixed(2);
+    
+    const homaTodayElem = document.getElementById('homa-today');
+    if (homaTodayElem) homaTodayElem.textContent = userData.homaToday.toFixed(4);
+    
+    const homaTotalElem = document.getElementById('homa-total');
+    if (homaTotalElem) homaTotalElem.textContent = userData.homaTotal.toFixed(4);
+    
+    const homaProgress = document.getElementById('homa-progress');
+    if (homaProgress) {
+        const percent = (userData.homaToday / 10) * 100;
+        homaProgress.style.width = Math.min(percent, 100) + '%';
+    }
+    
+    const homaProgressText = document.getElementById('homa-progress-text');
+    if (homaProgressText) {
+        const percent = Math.min((userData.homaToday / 10) * 100, 100).toFixed(1);
+        homaProgressText.textContent = percent + '% от лимита';
+    }
+    
+    const homaMaxBtn = document.getElementById('homa-max-btn');
+    if (homaMaxBtn) {
+        if (userData.homaToday >= 10) {
+            homaMaxBtn.disabled = true;
+            homaMaxBtn.textContent = 'Достигнут лимит на сегодня';
+        } else {
+            homaMaxBtn.disabled = false;
+            homaMaxBtn.textContent = 'Кликай по Хоме!';
+        }
+    }
 }
 
 function updateProfileStats() {
@@ -97,6 +152,28 @@ function updateProfileStats() {
     document.getElementById('join-date').textContent = new Date(joinDate).toLocaleDateString('ru-RU');
 }
 
+function checkHomaReset() {
+    const today = new Date().toDateString();
+    if (userData.lastHomaReset !== today) {
+        userData.homaToday = 0;
+        userData.lastHomaReset = today;
+        saveData();
+    }
+}
+
+function checkVacation() {
+    if (vacationEnd && vacationEnd > new Date()) {
+        const now = new Date();
+        const diff = vacationEnd - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById('vacation-status').textContent = 
+            `Выходной активен: ${hours}ч ${minutes}м`;
+    } else {
+        document.getElementById('vacation-status').textContent = 'Нет активного выходного';
+    }
+}
+
 function showWelcomeScreen() {
     const randomIndex = Math.floor(Math.random() * motivationPhrases.length);
     document.getElementById('motivation-text').textContent = motivationPhrases[randomIndex];
@@ -115,14 +192,17 @@ function setupEventListeners() {
     
     document.getElementById('add-task-btn').addEventListener('click', function() {
         document.getElementById('task-modal').classList.add('active');
+        updateReward();
     });
     
     document.getElementById('shop-btn').addEventListener('click', function() {
         document.getElementById('shop-modal').classList.add('active');
+        checkVacation();
     });
     
-    document.getElementById('earn-btn').addEventListener('click', function() {
-        showNotification('Мини-игры скоро появятся!', 'info');
+    document.getElementById('homa-btn').addEventListener('click', function() {
+        document.getElementById('homa-modal').classList.add('active');
+        updateUserInfo();
     });
     
     document.getElementById('refresh-btn').addEventListener('click', function() {
@@ -151,6 +231,7 @@ function setupEventListeners() {
                 updateProfileStats();
             } else if (section === 'shop') {
                 document.getElementById('shop-modal').classList.add('active');
+                checkVacation();
             } else {
                 closeAllModals();
             }
@@ -166,31 +247,17 @@ function setupEventListeners() {
         });
     });
     
-    document.getElementById('task-deadline').addEventListener('input', updateReward);
+    document.getElementById('task-days').addEventListener('input', updateReward);
+    document.getElementById('task-hours').addEventListener('input', updateReward);
+    document.getElementById('task-minutes').addEventListener('input', updateReward);
+    
     document.getElementById('save-task-btn').addEventListener('click', saveNewTask);
     
-    document.querySelectorAll('.shop-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.shop-content').forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById(this.dataset.tab + '-tab').classList.add('active');
-        });
-    });
-    
-    document.querySelectorAll('[data-item="dark_theme"]').forEach(btn => {
+    document.querySelectorAll('.buy-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            if (userData.balance >= 30) {
-                if (confirm('Купить тёмную тему за 30 монет?')) {
-                    userData.balance -= 30;
-                    document.body.classList.add('dark-theme');
-                    saveUserData();
-                    updateUserInfo();
-                    showNotification('Тёмная тема куплена!', 'success');
-                }
-            } else {
-                showNotification('Недостаточно монет!', 'error');
-            }
+            const hours = parseInt(this.dataset.hours);
+            const price = parseInt(this.dataset.price);
+            buyVacation(hours, price);
         });
     });
     
@@ -205,64 +272,109 @@ function setupEventListeners() {
     document.getElementById('notifications-toggle').addEventListener('change', function() {
         showNotification('Уведомления ' + (this.checked ? 'включены' : 'отключены'), 'info');
     });
+    
+    const homaImage = document.getElementById('homa-image');
+    if (homaImage) {
+        homaImage.addEventListener('click', homaClick);
+    }
 }
 
 function updateReward() {
-    const hours = parseInt(document.getElementById('task-deadline').value) || 24;
-    const base = hours * 0.1;
-    const multiplier = difficultyMultipliers[currentDifficulty];
-    const total = base * multiplier;
+    const days = parseInt(document.getElementById('task-days').value) || 0;
+    const hours = parseInt(document.getElementById('task-hours').value) || 0;
+    const minutes = parseInt(document.getElementById('task-minutes').value) || 1;
     
-    document.getElementById('base-reward').textContent = base.toFixed(1);
+    const totalMinutes = (days * 24 * 60) + (hours * 60) + minutes;
+    const baseReward = totalMinutes * 0.01;
+    const multiplier = difficultyMultipliers[currentDifficulty];
+    const totalReward = baseReward * multiplier;
+    
+    document.getElementById('base-reward').textContent = baseReward.toFixed(2);
     document.getElementById('difficulty-bonus-text').textContent = '+' + ((multiplier - 1) * 100) + '%';
-    document.getElementById('total-reward').textContent = total.toFixed(1);
+    document.getElementById('total-reward').textContent = totalReward.toFixed(2);
+}
+
+function getTotalMinutes() {
+    const days = parseInt(document.getElementById('task-days').value) || 0;
+    const hours = parseInt(document.getElementById('task-hours').value) || 0;
+    const minutes = parseInt(document.getElementById('task-minutes').value) || 1;
+    return (days * 24 * 60) + (hours * 60) + minutes;
+}
+
+function getReminderMinutes() {
+    const days = parseInt(document.getElementById('reminder-days').value) || 0;
+    const hours = parseInt(document.getElementById('reminder-hours').value) || 0;
+    const minutes = parseInt(document.getElementById('reminder-minutes').value) || 5;
+    return (days * 24 * 60) + (hours * 60) + minutes;
 }
 
 function saveNewTask() {
     const title = document.getElementById('task-title').value.trim();
-    const hours = parseInt(document.getElementById('task-deadline').value);
-    const reminder = document.querySelector('input[name="reminder"]:checked')?.value || 5;
+    const totalMinutes = getTotalMinutes();
+    const reminderMinutes = getReminderMinutes();
     
     if (!title) {
         showNotification('Введите название задачи!', 'error');
         return;
     }
     
-    if (hours < 1 || hours > 720) {
-        showNotification('Введите время от 1 до 720 часов!', 'error');
+    if (totalMinutes < 1 || totalMinutes > 43200) {
+        showNotification('Введите время от 1 минуты до 30 дней!', 'error');
+        return;
+    }
+    
+    if (reminderMinutes >= totalMinutes) {
+        showNotification('Напоминание должно быть раньше дедлайна!', 'error');
         return;
     }
     
     const now = new Date();
-    const deadline = new Date(now.getTime() + hours * 60 * 60 * 1000);
+    let deadline = new Date(now.getTime() + totalMinutes * 60 * 1000);
+    
+    if (vacationEnd && vacationEnd > now) {
+        deadline = new Date(deadline.getTime() + (vacationEnd - now));
+    }
+    
     const reward = parseFloat(document.getElementById('total-reward').textContent);
     
     const newTask = {
         id: Date.now().toString(),
         title: title,
         deadline: deadline.toISOString(),
-        reminder: parseInt(reminder),
+        reminder: reminderMinutes,
         difficulty: currentDifficulty,
         reward: reward,
         completed: false,
-        createdAt: now.toISOString()
+        createdAt: now.toISOString(),
+        totalMinutes: totalMinutes
     };
     
     tasks.push(newTask);
-    saveTasks();
+    saveData();
     renderTasks();
     closeAllModals();
     showNotification('Задача добавлена!', 'success');
     
     document.getElementById('task-title').value = '';
-    document.getElementById('task-deadline').value = '24';
+    document.getElementById('task-days').value = '0';
+    document.getElementById('task-hours').value = '0';
+    document.getElementById('task-minutes').value = '30';
+    document.getElementById('reminder-days').value = '0';
+    document.getElementById('reminder-hours').value = '0';
+    document.getElementById('reminder-minutes').value = '5';
     
     sendToBot('new_task', { task: newTask });
 }
 
 function renderTasks() {
     const container = document.getElementById('tasks-container');
-    const activeTasks = tasks.filter(t => !t.completed);
+    const now = new Date();
+    
+    let activeTasks = tasks.filter(t => !t.completed);
+    
+    if (vacationEnd && vacationEnd > now) {
+        activeTasks = activeTasks.filter(t => new Date(t.deadline) > vacationEnd);
+    }
     
     if (activeTasks.length === 0) {
         container.innerHTML = `
@@ -279,6 +391,12 @@ function renderTasks() {
     let html = '';
     activeTasks.forEach((task, index) => {
         const timeLeft = getTimeLeft(task.deadline);
+        const deadline = new Date(task.deadline);
+        const created = new Date(task.createdAt);
+        const timePassed = (now - created) / (1000 * 60);
+        
+        let canDelete = timePassed > 60 && task.totalMinutes > 60;
+        
         html += `
             <div class="task-item" data-id="${task.id}">
                 <div class="task-header">
@@ -292,11 +410,16 @@ function renderTasks() {
                 <div class="task-actions">
                     <div class="task-reward">
                         <i class="fas fa-coins"></i>
-                        ${task.reward.toFixed(1)} монет
+                        ${task.reward.toFixed(2)} монет
                     </div>
-                    <button class="complete-btn" onclick="completeTask('${task.id}')">
-                        <i class="fas fa-check"></i> Выполнить
-                    </button>
+                    <div>
+                        <button class="complete-btn" onclick="completeTask('${task.id}')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        ${canDelete ? `<button class="delete-btn" onclick="deleteTask('${task.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>` : ''}
+                    </div>
                 </div>
             </div>
         `;
@@ -312,10 +435,13 @@ function getTimeLeft(deadline) {
     
     if (diff < 0) return 'Просрочено';
     
-    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     
-    if (hours > 0) {
+    if (days > 0) {
+        return days + 'д ' + hours + 'ч';
+    } else if (hours > 0) {
         return hours + 'ч ' + minutes + 'м';
     } else {
         return minutes + 'м';
@@ -331,29 +457,131 @@ window.completeTask = function(taskId) {
     const task = tasks.find(t => t.id === taskId);
     if (!task) return;
     
-    task.completed = true;
-    task.completedAt = new Date().toISOString();
-    
     const now = new Date();
+    const created = new Date(task.createdAt);
+    const timePassed = (now - created) / (1000 * 60);
+    
+    const minTime = task.totalMinutes * 0.1;
+    
+    if (timePassed < minTime) {
+        const remaining = Math.ceil(minTime - timePassed);
+        showNotification(`Подождите еще ${remaining} минут!`, 'error');
+        return;
+    }
+    
+    task.completed = true;
+    task.completedAt = now.toISOString();
+    
     const deadline = new Date(task.deadline);
     let reward = task.reward;
     
     if (now < deadline) {
         const early = (deadline - now) / (1000 * 60 * 60);
-        if (early > task.deadlineHours * 0.5) {
+        if (early > task.totalMinutes * 0.5) {
             reward *= 2;
         }
     }
     
     userData.balance += reward;
-    saveTasks();
-    saveUserData();
+    saveData();
     renderTasks();
     updateUserInfo();
-    showNotification('Задача выполнена! +' + reward.toFixed(1) + ' монет', 'success');
+    showNotification('Задача выполнена! +' + reward.toFixed(2) + ' монет', 'success');
     
     sendToBot('task_completed', { taskId: taskId, reward: reward });
 };
+
+window.deleteTask = function(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    
+    const now = new Date();
+    const created = new Date(task.createdAt);
+    const timePassed = (now - created) / (1000 * 60);
+    
+    if (timePassed > 60 && task.totalMinutes > 60) {
+        if (confirm('Удалить задачу? Будет списано 2 монеты!')) {
+            if (userData.balance >= 2) {
+                userData.balance -= 2;
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveData();
+                renderTasks();
+                updateUserInfo();
+                showNotification('Задача удалена. Списано 2 монеты', 'info');
+                
+                sendToBot('task_deleted', { taskId: taskId, penalty: 2 });
+            } else {
+                showNotification('Недостаточно монет для штрафа!', 'error');
+            }
+        }
+    }
+};
+
+function homaClick() {
+    if (userData.homaToday >= 10) {
+        showNotification('Лимит на сегодня исчерпан!', 'error');
+        return;
+    }
+    
+    const reward = 0.0001;
+    userData.homaToday += reward;
+    userData.homaTotal += reward;
+    userData.balance += reward;
+    
+    saveData();
+    updateUserInfo();
+    
+    const effect = document.getElementById('homa-effect');
+    effect.classList.add('show');
+    setTimeout(() => {
+        effect.classList.remove('show');
+    }, 1000);
+    
+    const image = document.getElementById('homa-image');
+    image.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        image.style.transform = 'scale(1)';
+    }, 100);
+}
+
+function buyVacation(hours, price) {
+    if (userData.balance < price) {
+        showNotification('Недостаточно монет!', 'error');
+        return;
+    }
+    
+    if (confirm(`Купить выходной на ${hours} часов за ${price} монет?`)) {
+        userData.balance -= price;
+        
+        const now = new Date();
+        let newVacationEnd;
+        
+        if (vacationEnd && vacationEnd > now) {
+            newVacationEnd = new Date(vacationEnd.getTime() + hours * 60 * 60 * 1000);
+        } else {
+            newVacationEnd = new Date(now.getTime() + hours * 60 * 60 * 1000);
+        }
+        
+        vacationEnd = newVacationEnd;
+        localStorage.setItem('vacationEnd', vacationEnd.toISOString());
+        
+        tasks.forEach(task => {
+            if (!task.completed) {
+                const deadline = new Date(task.deadline);
+                task.deadline = new Date(deadline.getTime() + hours * 60 * 60 * 1000).toISOString();
+            }
+        });
+        
+        saveData();
+        renderTasks();
+        checkVacation();
+        updateUserInfo();
+        closeAllModals();
+        showNotification(`Выходной на ${hours} часов активирован!`, 'success');
+        
+        sendToBot('vacation_bought', { hours: hours, price: price });
+    }
+}
 
 function closeAllModals() {
     document.querySelectorAll('.modal').forEach(modal => {
@@ -394,34 +622,33 @@ function sendToBot(event, data) {
     }
 }
 
-function saveUserData() {
-    localStorage.setItem('userBalance', userData.balance);
-}
-
 window.addTestTasks = function() {
+    const now = new Date();
     const test = [
         {
             id: '1',
             title: 'Прочитать книгу',
-            deadline: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+            deadline: new Date(now.getTime() + 2 * 60 * 60 * 1000).toISOString(),
             difficulty: 'medium',
-            reward: 2.4,
+            reward: 1.2,
             completed: false,
-            createdAt: new Date().toISOString()
+            createdAt: now.toISOString(),
+            totalMinutes: 120
         },
         {
             id: '2',
             title: 'Сделать зарядку',
-            deadline: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            deadline: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString(),
             difficulty: 'easy',
-            reward: 1.2,
+            reward: 0.6,
             completed: false,
-            createdAt: new Date().toISOString()
+            createdAt: now.toISOString(),
+            totalMinutes: 1440
         }
     ];
     
     tasks = [...tasks, ...test];
-    saveTasks();
+    saveData();
     renderTasks();
     showNotification('Тестовые задачи добавлены!', 'success');
 };

@@ -22,7 +22,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: #f5f7fa;
     color: var(--text-color);
     min-height: 100vh;
     padding-bottom: 70px;
@@ -53,9 +53,7 @@ body {
 #welcome-title {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--primary-color);
 }
 
 #motivation-text {
@@ -88,7 +86,7 @@ body {
 }
 
 #start-btn {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background: var(--primary-color);
     color: white;
     border: none;
     padding: 15px 40px;
@@ -176,17 +174,17 @@ header h1 {
 }
 
 #balance-card .stat-icon {
-    background: linear-gradient(45deg, #FFD700, #FFA500);
+    background: #FFD700;
     color: white;
 }
 
 #completed-card .stat-icon {
-    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    background: #4CAF50;
     color: white;
 }
 
 #active-card .stat-icon {
-    background: linear-gradient(45deg, #2196F3, #03A9F4);
+    background: #2196F3;
     color: white;
 }
 
@@ -342,6 +340,25 @@ header h1 {
     transform: scale(1.05);
 }
 
+.delete-btn {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    background: #d32f2f;
+    transform: scale(1.05);
+}
+
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -483,42 +500,27 @@ header h1 {
     border-color: var(--primary-color);
 }
 
-.deadline-hint {
-    font-size: 0.8rem;
-    color: var(--text-light);
-    margin-top: 5px;
+.time-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.reminder-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.reminder-option {
-    background: var(--light-color);
-    padding: 12px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
+.time-input-group input {
+    flex: 1;
     text-align: center;
 }
 
-.reminder-option input {
-    display: none;
-}
-
-.reminder-option span {
-    display: block;
-}
-
-.reminder-option:hover {
-    background: #e0e0e0;
-}
-
-.reminder-option input:checked + span {
-    color: var(--primary-color);
+.time-input-group span {
+    font-size: 1.5rem;
     font-weight: bold;
+    color: var(--text-light);
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 5px;
 }
 
 .difficulty-options {
@@ -586,7 +588,7 @@ header h1 {
 }
 
 .save-btn {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background: var(--primary-color);
     color: white;
     border: none;
     padding: 15px;
@@ -737,7 +739,7 @@ header h1 {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    background: #4CAF50;
     border-radius: 5px;
     transition: width 0.5s ease;
 }
@@ -828,7 +830,7 @@ input:checked + .slider:before {
 }
 
 .shop-balance {
-    background: linear-gradient(45deg, #FFD700, #FFA500);
+    background: #FFD700;
     color: white;
     padding: 15px;
     border-radius: var(--border-radius);
@@ -841,120 +843,153 @@ input:checked + .slider:before {
     box-shadow: var(--box-shadow);
 }
 
-.shop-tabs {
-    display: flex;
-    gap: 10px;
+.shop-description {
+    text-align: center;
+    color: var(--text-light);
     margin-bottom: 20px;
-    overflow-x: auto;
-    padding-bottom: 10px;
+    font-style: italic;
 }
 
-.shop-tab {
-    background: var(--light-color);
+.vacation-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.vacation-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.vacation-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+}
+
+.vacation-time {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.vacation-price {
+    font-size: 1.1rem;
+    color: var(--warning-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.buy-btn {
+    background: var(--primary-color);
+    color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
     transition: var(--transition);
-    white-space: nowrap;
-    font-weight: 500;
+    width: 100%;
 }
 
-.shop-tab.active {
-    background: var(--primary-color);
-    color: white;
+.buy-btn:hover {
+    background: var(--secondary-color);
 }
 
-.shop-content {
-    display: none;
-}
-
-.shop-content.active {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-.shop-item {
-    background: white;
+.current-vacation {
+    background: var(--light-color);
     border-radius: var(--border-radius);
     padding: 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
 }
 
-.shop-item:hover {
-    transform: translateY(-3px);
-}
-
-.item-info {
+.current-vacation h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    flex: 1;
-}
-
-.item-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: var(--border-radius);
-    background: var(--primary-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-}
-
-.item-details h4 {
-    margin-bottom: 5px;
-    color: var(--dark-color);
-}
-
-.item-details p {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-bottom: 5px;
-}
-
-.item-action {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     gap: 10px;
 }
 
-.item-price {
-    color: var(--warning-color);
-    font-weight: bold;
+.homa-container {
+    text-align: center;
+}
+
+.homa-stats {
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin-bottom: 20px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 5px;
 }
 
-.shop-buy-btn {
-    background: var(--primary-color);
+.homa-image-container {
+    position: relative;
+    margin: 20px auto;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+}
+
+.homa-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.1s ease;
+}
+
+.homa-image:active {
+    transform: scale(0.95);
+}
+
+.homa-click-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--success-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.homa-click-effect.show {
+    animation: floatUp 1s ease;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -100%);
+    }
+}
+
+.homa-progress {
+    margin: 20px 0;
+}
+
+.homa-max-btn {
+    background: #ccc;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 0.9rem;
-    min-width: 100px;
-}
-
-.shop-buy-btn:hover:not(:disabled) {
-    background: var(--secondary-color);
-    transform: scale(1.05);
-}
-
-.shop-buy-btn:disabled {
-    background: #ccc;
+    padding: 12px;
+    border-radius: var(--border-radius);
     cursor: not-allowed;
+    width: 100%;
+    font-size: 1rem;
 }
 
 .notification {
@@ -1002,16 +1037,16 @@ body.dark-theme {
     --dark-color: #f0f0f0;
     --text-color: #e0e0e0;
     --text-light: #b0b0b0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: #1a1a2e;
 }
 
 body.dark-theme .stat-card,
 body.dark-theme .action-btn,
 body.dark-theme .tasks-section,
 body.dark-theme .modal-content,
-body.dark-theme .shop-item,
 body.dark-theme .progress-section,
-body.dark-theme .profile-settings {
+body.dark-theme .profile-settings,
+body.dark-theme .vacation-card {
     background: #2d2d44;
     color: var(--text-color);
 }
@@ -1019,4 +1054,26 @@ body.dark-theme .profile-settings {
 body.dark-theme .bottom-nav {
     background: #2d2d44;
     border-top: 1px solid #444;
+}
+
+@media (max-width: 480px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .vacation-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .difficulty-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .time-input-group {
+        flex-wrap: wrap;
+    }
+    
+    .time-input-group input {
+        min-width: 60px;
+    }
 }
