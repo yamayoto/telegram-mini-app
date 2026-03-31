@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager Bot</title>
+    <title>Task Manager</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -12,366 +12,184 @@
     <!-- ЭКРАН ПРИВЕТСТВИЯ -->
     <div id="welcome-screen" class="screen active">
         <div class="welcome-container">
-            <h1 id="welcome-title">Привет, <span id="username">Друг</span>!</h1>
+            <h1>Привет, <span id="username">Друг</span>!</h1>
             <p id="motivation-text">Загрузка...</p>
             <div id="loading-dots">
                 <div class="dot"></div>
                 <div class="dot"></div>
                 <div class="dot"></div>
             </div>
-            <button id="start-btn" class="hidden">
-                <i class="fas fa-rocket"></i>
-                Приступить!
-            </button>
+            <button id="start-btn" class="hidden">Приступить!</button>
         </div>
     </div>
 
-    <!-- ГЛАВНОЕ ПРИЛОЖЕНИЕ -->
+    <!-- ГЛАВНЫЙ ЭКРАН -->
     <div id="main-app" class="screen">
         <header>
             <h1><i class="fas fa-tasks"></i> Task Manager</h1>
-            <button class="icon-btn" id="refresh-btn">
-                <i class="fas fa-sync-alt"></i>
-            </button>
+            <button class="icon-btn" id="refresh-btn"><i class="fas fa-sync-alt"></i></button>
         </header>
 
         <!-- СТАТИСТИКА -->
         <div class="stats-container">
-            <div class="stat-card" id="balance-card">
-                <div class="stat-icon">
-                    <i class="fas fa-coins"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Баланс</span>
-                    <span class="stat-value" id="balance-value">0</span>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                <div><span class="stat-label">Монеты</span><br><span id="balance-value">0</span></div>
             </div>
-            <div class="stat-card" id="completed-card">
-                <div class="stat-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Выполнено</span>
-                    <span class="stat-value" id="completed-value">0</span>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div><span class="stat-label">Выполнено</span><br><span id="completed-value">0</span></div>
             </div>
-            <div class="stat-card" id="active-card">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-label">Активные</span>
-                    <span class="stat-value" id="active-value">0</span>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div><span class="stat-label">Активные</span><br><span id="active-value">0</span></div>
             </div>
         </div>
 
-        <!-- МЕНЮ ДЕЙСТВИЙ -->
+        <!-- КНОПКИ ДЕЙСТВИЙ -->
         <div class="actions-menu">
-            <button class="action-btn" id="add-task-btn">
-                <i class="fas fa-plus-circle"></i>
-                <span>Добавить задачу</span>
-            </button>
-            <button class="action-btn" id="shop-btn">
-                <i class="fas fa-store"></i>
-                <span>Магазин</span>
-            </button>
-            <button class="action-btn" id="homa-btn">
-                <i class="fas fa-paw"></i>
-                <span>Хома</span>
-            </button>
+            <button class="action-btn" id="add-task-btn"><i class="fas fa-plus"></i> Добавить задачу</button>
+            <button class="action-btn" id="shop-btn"><i class="fas fa-store"></i> Магазин</button>
+            <button class="action-btn" id="homa-btn"><i class="fas fa-paw"></i> Хома</button>
         </div>
 
         <!-- СПИСОК ЗАДАЧ -->
         <div class="tasks-section">
-            <h2><i class="fas fa-list"></i> Текущие задачи</h2>
-            <div id="tasks-container">
-                <div class="empty-tasks">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>У вас еще нет задач</p>
-                </div>
-            </div>
+            <h2>Мои задачи</h2>
+            <div id="tasks-container"></div>
         </div>
     </div>
 
-    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+    <!-- НИЖНЕЕ МЕНЮ -->
     <div class="bottom-nav">
-        <button class="nav-btn active" data-section="tasks">
-            <i class="fas fa-home"></i>
-            <span>Главная</span>
-        </button>
-        <button class="nav-btn" data-section="shop">
-            <i class="fas fa-store"></i>
-            <span>Магазин</span>
-        </button>
-        <button class="nav-btn" data-section="profile">
-            <i class="fas fa-user"></i>
-            <span>Профиль</span>
-        </button>
+        <button class="nav-btn active" data-section="tasks"><i class="fas fa-home"></i><span>Главная</span></button>
+        <button class="nav-btn" data-section="shop"><i class="fas fa-store"></i><span>Магазин</span></button>
+        <button class="nav-btn" data-section="profile"><i class="fas fa-user"></i><span>Профиль</span></button>
     </div>
 
-    
-    <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ЗАДАЧИ -->
-<div id="task-modal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2><i class="fas fa-plus-circle"></i> Новая задача</h2>
-            <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <!-- ПОЛЕ ДЛЯ НАЗВАНИЯ - ТЕПЕРЬ ОНО ТОЧНО РАБОТАЕТ -->
-            <div class="form-group">
-                <label for="task-title"><i class="fas fa-pencil-alt"></i> Название задачи</label>
-                <input type="text" id="task-title" class="task-title-input" placeholder="Например: Сделать зарядку" autocomplete="off">
+    <!-- МОДАЛЬНОЕ ОКНО - НОВАЯ ЗАДАЧА -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Новая задача</h2>
+                <button class="close-modal">&times;</button>
             </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-hourglass-half"></i> Время на выполнение</label>
-                <div class="time-input-group">
-                    <input type="number" id="task-days" min="0" max="30" value="0" placeholder="Дни">
-                    <span>:</span>
-                    <input type="number" id="task-hours" min="0" max="23" value="0" placeholder="Часы">
-                    <span>:</span>
-                    <input type="number" id="task-minutes" min="1" max="59" value="30" placeholder="Минуты">
+            <div class="modal-body">
+                <input type="text" id="task-title" placeholder="Название задачи">
+                
+                <label>Срок выполнения</label>
+                <div class="time-group">
+                    <input type="number" id="task-days" placeholder="Дни" min="0" max="30" value="0">
+                    <span>д</span>
+                    <input type="number" id="task-hours" placeholder="Часы" min="0" max="23" value="0">
+                    <span>ч</span>
+                    <input type="number" id="task-minutes" placeholder="Минуты" min="1" max="59" value="30">
+                    <span>м</span>
                 </div>
-                <div class="hint">дни:часы:минуты</div>
-            </div>
 
-            <div class="form-group">
-                <label><i class="fas fa-bell"></i> Напомнить за</label>
-                <div class="time-input-group">
-                    <input type="number" id="reminder-days" min="0" max="30" value="0" placeholder="Дни">
-                    <span>:</span>
-                    <input type="number" id="reminder-hours" min="0" max="23" value="0" placeholder="Часы">
-                    <span>:</span>
-                    <input type="number" id="reminder-minutes" min="1" max="59" value="5" placeholder="Минуты">
-                </div>
-                <div class="hint">до дедлайна</div>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-chart-line"></i> Сложность</label>
+                <label>Сложность</label>
                 <div class="difficulty-options">
-                    <button type="button" class="difficulty-btn" data-level="easy">
-                        <i class="fas fa-smile"></i>
-                        <span>Легко</span>
-                        <span class="difficulty-bonus">x0.5</span>
-                    </button>
-                    <button type="button" class="difficulty-btn active" data-level="medium">
-                        <i class="fas fa-meh"></i>
-                        <span>Средне</span>
-                        <span class="difficulty-bonus">x1.0</span>
-                    </button>
-                    <button type="button" class="difficulty-btn" data-level="hard">
-                        <i class="fas fa-frown"></i>
-                        <span>Сложно</span>
-                        <span class="difficulty-bonus">x2.0</span>
-                    </button>
+                    <button class="difficulty-btn" data-level="easy">Легко x0.5</button>
+                    <button class="difficulty-btn active" data-level="medium">Средне x1</button>
+                    <button class="difficulty-btn" data-level="hard">Сложно x2</button>
                 </div>
-            </div>
 
-            <div class="reward-preview">
-                <h3><i class="fas fa-coins"></i> Награда</h3>
-                <div class="reward-details">
-                    <div>Базовая: <span id="base-reward">0.5</span> монет</div>
-                    <div>Бонус сложности: <span id="difficulty-bonus-text">+0%</span></div>
-                    <div class="total-reward">Итого: <span id="total-reward">0.5</span> монет</div>
+                <div class="reward-box">
+                    Награда: <span id="total-reward">0</span> монет
                 </div>
-            </div>
 
-            <button type="button" class="save-btn" id="save-task-btn">
-                <i class="fas fa-check"></i>
-                Создать задачу
-            </button>
+                <button id="save-task-btn">Создать</button>
+            </div>
         </div>
     </div>
-</div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ПРОФИЛЯ -->
+    <!-- МОДАЛЬНОЕ ОКНО - ПРОФИЛЬ -->
     <div id="profile-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-user-circle"></i> Мой профиль</h2>
+                <h2>Профиль</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="profile-header">
-                    <div class="avatar-container">
-                        <img id="user-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Аватар">
-                        <div class="avatar-status" id="status-indicator"></div>
-                    </div>
-                    <div class="profile-info">
-                        <h3 id="profile-username">@username</h3>
-                        <div class="user-id">ID: <span id="user-id">123456789</span></div>
-                        <div class="join-date">
-                            <i class="fas fa-calendar-alt"></i>
-                            Присоединился: <span id="join-date">01.01.2024</span>
-                        </div>
-                    </div>
+                <div class="profile-info">
+                    <img id="user-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+                    <h3 id="profile-name">@username</h3>
+                    <p>ID: <span id="user-id">123</span></p>
+                    <p>С нами: <span id="join-date">01.01.2024</span></p>
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="stat-active">0</div>
-                            <div class="stat-label">Активные</div>
-                        </div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="stat-completed">0</div>
-                            <div class="stat-label">Завершённые</div>
-                        </div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="stat-overdue">0</div>
-                            <div class="stat-label">Просроченные</div>
-                        </div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-icon"><i class="fas fa-tasks"></i></div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="stat-total">0</div>
-                            <div class="stat-label">Всего задач</div>
-                        </div>
-                    </div>
+                    <div class="stat-box">✅ Выполнено: <span id="stat-completed">0</span></div>
+                    <div class="stat-box">📋 Активных: <span id="stat-active">0</span></div>
+                    <div class="stat-box">⚠️ Просрочено: <span id="stat-overdue">0</span></div>
+                    <div class="stat-box">📊 Всего: <span id="stat-total">0</span></div>
                 </div>
 
                 <div class="progress-section">
-                    <h4><i class="fas fa-chart-line"></i> Продуктивность</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                    </div>
-                    <div class="progress-info">
-                        <span>Коэффициент: <strong id="completion-rate">0%</strong></span>
-                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+                    <p>Прогресс: <span id="completion-rate">0</span>%</p>
                 </div>
 
-                <div class="profile-settings">
-                    <h4><i class="fas fa-cog"></i> Настройки</h4>
-                    <div class="settings-list">
-                        <div class="setting-item">
-                            <span>Тёмная тема</span>
-                            <label class="switch">
-                                <input type="checkbox" id="dark-mode-toggle">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="setting-item">
-                            <span>Уведомления</span>
-                            <label class="switch">
-                                <input type="checkbox" id="notifications-toggle" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
+                <div class="settings">
+                    <label>Тёмная тема</label>
+                    <label class="switch"><input type="checkbox" id="dark-mode-toggle"><span class="slider"></span></label>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО МАГАЗИНА (ТОЛЬКО ВЫХОДНЫЕ) -->
+    <!-- МОДАЛЬНОЕ ОКНО - МАГАЗИН -->
     <div id="shop-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-store"></i> Магазин</h2>
+                <h2>Магазин</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="shop-balance">
-                    <i class="fas fa-coins"></i>
-                    <span>Баланс: <strong id="shop-balance">0</strong> монет</span>
-                </div>
-
-                <div class="shop-description">
-                    <p>💰 5 монет = 1 час выходного</p>
-                    <p>Выходной переносит все задачи на купленное время</p>
-                </div>
-
-                <div class="vacation-options">
-                    <div class="vacation-card">
-                        <div class="vacation-time">1 час</div>
-                        <div class="vacation-price"><i class="fas fa-coins"></i> 5</div>
-                        <button class="buy-btn" data-hours="1" data-price="5">Купить</button>
-                    </div>
-                    <div class="vacation-card">
-                        <div class="vacation-time">2 часа</div>
-                        <div class="vacation-price"><i class="fas fa-coins"></i> 10</div>
-                        <button class="buy-btn" data-hours="2" data-price="10">Купить</button>
-                    </div>
-                    <div class="vacation-card">
-                        <div class="vacation-time">4 часа</div>
-                        <div class="vacation-price"><i class="fas fa-coins"></i> 20</div>
-                        <button class="buy-btn" data-hours="4" data-price="20">Купить</button>
-                    </div>
-                    <div class="vacation-card">
-                        <div class="vacation-time">8 часов</div>
-                        <div class="vacation-price"><i class="fas fa-coins"></i> 40</div>
-                        <button class="buy-btn" data-hours="8" data-price="40">Купить</button>
-                    </div>
-                    <div class="vacation-card">
-                        <div class="vacation-time">24 часа</div>
-                        <div class="vacation-price"><i class="fas fa-coins"></i> 120</div>
-                        <button class="buy-btn" data-hours="24" data-price="120">Купить</button>
-                    </div>
-                    <div class="vacation-card">
-                        <div class="vacation-time">48 часов</div>
-                        <div class="vacation-price"><i class="fas fa-coins"></i> 240</div>
-                        <button class="buy-btn" data-hours="48" data-price="240">Купить</button>
-                    </div>
+                <div class="balance-box">💰 Баланс: <span id="shop-balance">0</span></div>
+                <p class="shop-desc">5 монет = 1 час переноса всех задач</p>
+                
+                <div class="vacation-list">
+                    <button class="vacation-btn" data-hours="1">1 час - 5 монет</button>
+                    <button class="vacation-btn" data-hours="2">2 часа - 10 монет</button>
+                    <button class="vacation-btn" data-hours="4">4 часа - 20 монет</button>
+                    <button class="vacation-btn" data-hours="8">8 часов - 40 монет</button>
+                    <button class="vacation-btn" data-hours="24">24 часа - 120 монет</button>
+                    <button class="vacation-btn" data-hours="48">48 часов - 240 монет</button>
                 </div>
 
                 <div class="current-vacation">
-                    <h3><i class="fas fa-umbrella-beach"></i> Текущий выходной</h3>
-                    <p id="vacation-status">Нет активного выходного</p>
+                    <p>📅 Активный перенос: <span id="vacation-status">нет</span></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ИГРЫ ХОМА -->
+    <!-- МОДАЛЬНОЕ ОКНО - ХОМА -->
     <div id="homa-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-paw"></i> Хома</h2>
+                <h2>Хома</h2>
                 <button class="close-modal">&times;</button>
             </div>
-            <div class="modal-body">
-                <div class="homa-container">
-                    <div class="homa-stats">
-                        <div>Монет за клик: <strong>0.0001</strong></div>
-                        <div>Сегодня: <span id="homa-today">0</span> / 10 монет</div>
-                        <div>Всего заработано: <span id="homa-total">0</span> монет</div>
-                    </div>
-                    
-                    <div class="homa-image-container">
-                        <img src="homa.png" alt="Хома" id="homa-image" class="homa-image">
-                        <div class="homa-click-effect" id="homa-effect">+0.0001</div>
-                    </div>
-                    
-                    <div class="homa-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="homa-progress" style="width: 0%"></div>
-                        </div>
-                        <div class="progress-text" id="homa-progress-text">0% от лимита</div>
-                    </div>
-                    
-                    <button class="homa-max-btn" id="homa-max-btn" disabled>
-                        Достигнут лимит на сегодня
-                    </button>
+            <div class="modal-body homa-body">
+                <div class="homa-stats">
+                    <p>За клик: <strong>0.0001</strong> монет</p>
+                    <p>Сегодня: <span id="homa-today">0</span> / 10 монет</p>
                 </div>
+                <div class="homa-image-container">
+                    <img src="homa.png" id="homa-image">
+                </div>
+                <div class="homa-progress">
+                    <div class="progress-bar"><div class="progress-fill" id="homa-progress"></div></div>
+                </div>
+                <button id="homa-max-btn" disabled>Лимит на сегодня</button>
             </div>
         </div>
     </div>
 
-    <!-- УВЕДОМЛЕНИЯ -->
-    <div id="notification" class="notification hidden">
-        <span id="notification-text"></span>
-    </div>
+    <!-- УВЕДОМЛЕНИЕ -->
+    <div id="notification" class="notification hidden"></div>
 
     <script src="app.js"></script>
 </body>
